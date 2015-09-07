@@ -1,0 +1,515 @@
+= Everything is code
+Rahul Somasunderam <rsomasunderam@transcendinsights.com>
+
+:revealjs_history: true
+:source-highlighter: highlightjs
+:revealjs_slideNumber: true
+:imagesdir: images
+:sourcedir: snippets
+:revealjs_customtheme: override.css
+
+[data-background="purple"]
+== Everything is +________+
+
+[%step]
+* Pre computer: `Tasks`
+* COBOL/RDBMS: `Data`
+* Ansible: `Documentation`
+* Sequential Programming: `Functions`
+* Object Oriented Programming: `Classes`
+* Agile: `Stories`
+* Functional Programming: `Functions` _again_
+* This talk: `Code`
+
+== We're interested in turning everything into code
+
+Rahul, just now
+
+=== What is code
+
+[%step]
+* It's human **_readable_**.
+* You can test code.
+* You can document code.
+* You can diff code.
+* You can build tools around code.
+* Coincidentally, it is machine executable.
+
+[data-background="red"]
+== What isn't always code
+
+[%step]
+* Testing [fragment]#_, Code_#
+* Preferences
+* Infrastructure, Networking
+* Builds, Integration
+* Spreadsheets, Documents, Slidedecks
+* Diagrams
+
+
+
+== Code
+
+This is so complicated it needs a talk of its own.
+I'm going to skip over it for now.
+
+
+
+
+== Testing
+
+In an ideal world designed by engineers, this abomination
+wouldn't exist.
+
+[data-background="images/Zephyr.jpg"]
+=== &nbsp;
+
+[data-background="red"]
+=== That's right
+
+* Zephyr - BAD!
+
+[data-background="gold"]
+=== Use BDD tools
+
+* Spock & mocha - GOOD!
+
+=== Spock
+
+[source,groovy]
+----
+class HumanaSpec extends Specification {
+  def "use case 2"() {
+    given: "A network of facilities"
+    and: "A patient"
+    when: "I send a query to my node"
+    then: "it queries humana and returns the patient summary"
+    when: "I fetch the document"
+    then: "The document exists"
+  }
+}
+----
+
+=== Code can generate reports
+
+For when the person asking for html is stubborn
+
+
+[data-background="images/spock-reports.png"]
+=== &nbsp;
+
+[data-background="green"]
+=== Tests _are_ code
+
+
+
+
+== Preferences
+
+[fragment]#Use Dotfiles.#
+
+[fragment]#Look at `rahulsom/dotfiles` if you want inspiration.#
+
+[fragment]#Every time I need a new computer to work like my old computer, it does the job in a couple of minutes.#
+
+
+
+[data-background="green"]
+=== Preferences _are_ code
+
+
+
+
+== Infrastructure
+
+[%step]
+* Servers
+* Laptops
+* _Containers_
+* _Applications_
+
+[data-background="images/docker-1920-1080.png"]
+=== &nbsp;
+
+=== Docker
+
+* Creates lightweight containers using `libcontainer`. Earlier versions used `lxc`.
+* Uses a git like version control system to compose containers out of existing containers.
+* _Containers are not virtual machines._
+* No elevated privileges. [fragment]#Yet.#
+
+[data-background="images/vagrant.png"]
+[data-background-size="400px"]
+=== &nbsp;
+
+=== Vagrant
+
+* Vagrant manages virtual machines
+* Works with VMWare and VirtualBox
+
+[data-background="DarkOrange"]
+=== Sometimes, purely immutable infrastructure is not for you
+
+[data-background="images/puppet.jpg"]
+=== &nbsp;
+
+=== Puppet
+
+* Started off as a ruby backend with ruby client. Now sports a java backend.
+* DSL is still heavily inspired by ruby.
+* Your definition of infrastructure is still immutable.
+* What you want on your _server_ vs how you want it done.
+
+=== Boxen
+
+* Masterless puppet for MacOS.
+* Some of us have been using it for years now.
+
+
+
+
+== Networking
+
+[data-background="images/octopus_blocks_die.png"]
+[data-background-size="400px"]
+=== &nbsp;
+
+=== Docker Compose
+
+[source,docker]
+----
+web:
+  extends:
+    file: common.yml
+    service: webapp
+  ports:
+    - "8000:8000"
+  links:
+    - db
+  environment:
+    - DEBUG=true
+db:
+  image: postgres
+----
+
+=== Docker Compose
+
+* The 12 factor app design
+
+[data-background="gold"]
+=== Also on amazon and vmware
+
+[data-background="images/docker_machine.png"]
+[data-background-size="600px"]
+=== &nbsp;
+
+[data-background="images/toolbox.png"]
+[data-background-size="600px"]
+=== &nbsp;
+
+[data-background="green"]
+=== Networking _is_ code
+
+
+
+
+== Builds
+
+=== In the beginning
+* Bash
+* Make
+
+[data-background="DarkOrange"]
+=== Too freeform
+
+=== Then eventually
+* Open Eclipse
+* Right click the project
+* Select Export
+* Click 'Application'
+
+[data-background="Red"]
+=== That isn't even a build system
+
+=== Newer tools
+
+* Ant
+* Maven
+
+[data-background="Red"]
+=== Ugly wrappers for code everywhere
+
+=== Gradle
+The goldilocks of build systems
+
+[data-background="green"]
+=== Builds _are_ code
+
+
+
+
+== Integration
+
+[data-background="images/jenkins_feature.jpg"]
+=== &nbsp;
+=== The Jenkins DSL plugin
+
+[source,groovy]
+----
+def project = 'quidryan/aws-sdk-test'
+def branchApi = new URL("https://api.github.com/repos/${project}/branches")
+def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
+branches.each {
+    def branchName = it.name
+    job {
+        name "${project}-${branchName}".replaceAll('/','-')
+        scm {
+            git("git://github.com/${project}.git", branchName)
+        }
+        steps {
+            maven("test -Dproject.name=${project}/${branchName}")
+        }
+    }
+}
+----
+
+[data-background="images/travisci.png"]
+[data-background-size="600px"]
+=== &nbsp;
+=== Travis CI
+
+Link a project once, and then configure using .travis.yml
+
+[source,yaml]
+----
+sudo: false
+language: groovy
+jdk:
+- oraclejdk7
+before_script:
+- rm -rf target
+- npm install -g bower
+script: "./travis.sh"
+env:
+  global:
+  - GIT_NAME="Rahul Somasunderam"
+  - GIT_EMAIL="rahul.som@gmail.com"
+  - GRAILS_CENTRAL_USERNAME=rahulsom
+  - secure: lcK0atc7vh1s9oh7Z9m17VTKcXrw0AiVM57MoJkuwpbXeZ46qYGN+EThsCaSlT4VcektrhnLVklDIMDcxt0Osv8AYBiZoPFHdnR5ISYb236BJzyC3ODGx5Vj6KQQhBntBGwXTJjXUh5S018fZpbnMbuCsj9xi0KQ055gx8rnxEQ=
+  - secure: Py1s5CzVMB5QqaGmH+/rKyvilroqCS1b9q+ltOeTEgBI3jthrTVAnZf+hD3kTxL0OaA6on0LAObKV3Bh9A3Bpt/ZP8aizQjabBImXsJU+p7Hf0YGR4KZiQ4Y40FMnxk42I639FhDBTahL7j7+Mjj/L5jsOvYc03G8JRUMFX+5Sw=
+cache:
+  directories:
+  - "$HOME/.grails/wrapper"
+  - "$HOME/.m2"
+  - "$HOME/.bower/cache"
+----
+
+
+[data-background="green"]
+=== Integration _is_ code
+
+
+
+
+
+[data-background="DarkOrange"]
+== Spreadsheets, Documents and Slidedecks
+The 3 most misunderstood tools in any workplace
+
+== Spreadsheets
+
+[%step]
+* Would a document with a table do the job?
+* Is it reactive? Can an R module or D3 document with a CSV do the job?
+
+
+
+
+== Documents
+
+=== Asciidoctor
+
+[%step]
+* The best thing since sliced bread
+* Can produce html, pdf, epub, email
+* Can integrate code, tests, images from tests
+
+=== Groovy Document Builder
+
+* Write groovy code like `xmlbuilder`
+* Produce Word and Pdf Documents
+
+=== mailcli
+
+* Source at `rahulsom/mailcli`.
+* Pipe asciidoctor output to email
+
+[data-background="green"]
+=== Documents _are_ code
+
+
+
+
+
+== Slidedecks
+[%step]
+* The simplest solution is to use https://github.com/hakimel/reveal.js[_reveal.js_].
+* But `html` is too verbose.
+* And `Markdown` isn't feature complete.
+* Converting `Asciidoctor` to a slidedeck is hard
+* `Lazybones` has a `gradle` app template for `Asciidoctor` and `reveal.js`
+
+=== Show me how
+If you don't have gvm already, run this:
+[source,bash]
+----
+curl -s get.gvmtool.net | bash
+----
+
+If you don't have lazybones already, run this:
+[source,bash]
+----
+gvm i lazybones
+----
+
+With lazybones installed, run this:
+[source,bash]
+----
+lazybones create asciidoctor-revealjs 1.0.0 myAwesomePresentation
+gradle asciidoctor -t
+----
+
+=== More Slidedecks
+There's a host of other options for building slidedecks.
+[%step]
+* impress js
+* deck js
+* roll your own js
+* Please stop this now js
+
+[data-background="green"]
+=== Slidedecks _are_ code
+
+[fragment]#This slidedeck _is_ code#
+
+
+
+
+== Diagrams
+
+=== Sequence Diagram
+
+[plantuml, uml, png]
+....
+@startuml
+actor Rahul
+entity Humana
+entity Walgreens
+entity Twitter
+database Memory
+Rahul -> Humana : Where for Vitality check?
+Humana -> Rahul : Walgreens
+Rahul -> Walgreens : Make appointment
+Walgreens -> Rahul : Here's an appointment
+Rahul -> Walgreens : Do the check
+Walgreens -> Rahul : Oh noes!
+Rahul -> Twitter : Walgreens sucks!
+Rahul -> Memory : Walgreens sucks
+
+@enduml
+....
+
+=== Plant UML
+
+[source,plantuml]
+----
+@startuml
+actor Rahul
+entity Humana
+entity Walgreens
+entity Twitter
+database Memory
+Rahul -> Humana : Where for Vitality check?
+Humana -> Rahul : Walgreens
+Rahul -> Walgreens : Make appointment
+Walgreens -> Rahul : Here's an appointment
+Rahul -> Walgreens : Do the check
+Walgreens -> Rahul : Oh noes!
+Rahul -> Twitter : Walgreens sucks!
+Rahul -> Memory : Walgreens sucks
+
+@enduml
+----
+
+=== Plant UML inside Asciidoctor
+
+[source,asciidoctor]
+----
+[plantuml, uml, png]
+....
+@startuml
+actor Rahul
+entity Humana
+entity Walgreens
+entity Twitter
+database Memory
+Rahul -> Humana : Where for Vitality check?
+Humana -> Rahul : Walgreens
+Rahul -> Walgreens : Make appointment
+Walgreens -> Rahul : Here's an appointment
+Rahul -> Walgreens : Do the check
+Walgreens -> Rahul : Oh noes!
+Rahul -> Twitter : Walgreens sucks!
+Rahul -> Memory : Walgreens sucks
+
+@enduml
+....
+----
+
+=== What else can it do
+
+* Sequence Diagrams
+* Use case diagrams
+* Class Diagrams
+* Activity Diagrams
+* Component Diagrams
+* State Diagrams
+* Object Diagrams
+
+=== Other tools
+
+* dot
+* ditaa
+
+
+
+
+== What else is code?
+
+[data-background="images/dashboard.png"]
+=== &nbsp;
+
+[data-background="images/soccer.png"]
+=== &nbsp;
+
+[data-background="images/steps.png"]
+=== &nbsp;
+
+[data-background="images/music.png"]
+=== &nbsp;
+
+
+
+
+== Questions
+
+image::batman.jpg[]
+
+=== Use the source, Luke
+image::yoda.png[]
+
+=== Thanks
+
+Please take 2 minutes to fill out this survey
+
+http://bit.ly/everythingiscode[http://bit.ly/everythingiscode]
