@@ -8,6 +8,10 @@ Rahul Somasunderam <rsomasunderam@transcendinsights.com>
 :sourcedir: snippets
 :revealjs_customtheme: override.css
 
+++++
+<link rel="stylesheet" href="styles/override.css">
+++++
+
 [data-background="purple"]
 == Everything is +________+
 
@@ -22,8 +26,6 @@ Rahul Somasunderam <rsomasunderam@transcendinsights.com>
 * This talk: `Code`
 
 == We're interested in turning everything into code
-
-Rahul, just now
 
 === What is code
 
