@@ -12,6 +12,11 @@ Rahul Somasunderam <rsomasunderam@transcendinsights.com>
 <link rel="stylesheet" href="styles/override.css">
 ++++
 
+== Who am I
+
+[data-background="images/laptop.jpg"]
+== &nbsp;
+
 [data-background="purple"]
 == Everything is +________+
 
