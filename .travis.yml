@@ -1,0 +1,5 @@
+language: groovy
+script: "rm -rf build && ./gradlew publishGhPages --info"
+env:
+  global:
+    secure: swOBA9Wp5sKyHD+7p1C6UsRTgVZH7Qca9eJDMbBEC3KYX1hFIm8Hav+IMILb4eSeH7ohyd5T43ufYsQnvMzYun57JbKrmmd0fc6LTpMumDcx/+UEXd3CQvLKuKJQWBqtFtevnj1uCS0SwbfDySZ/6+2PvZo17aipQqCGgAMIhAuE+AC7kd2LCSuznRDGOMw0vuQOP/miF/ErGjD7EYvPzexwqVL4lVoWaREBt8vkxRJcBPhm8k2GIwk1L2RSaDKAGrbN/jaPrbHFtBMUJsYD+M3xSxZ5ZFGVa6sJdyo+fJdR2im16QeqTYYTweMwFKea+3GVVktF1Cz+WGpzLTjcYjuwnn1marBr+J+hWNACuX/l5rb9L0Gr/TZ85V/Tz8e3KVtcLCuehnd3ZjEEYCosxuEO4jm3Znn2A7BFNgkf+w5uithkyVLkn2z8//bxFiszbg18ExEgQp3zwSkvpgLwgiCElgjYE1bob2Od7SxCh8BYkLjYVBwLRUwpiOdeJ3VqHoPhPtwPYHeSkt7S6lUDQ8rAH8nNjmaKl2wJ00v3B/ZbYHO7jkp15YEwkPcD6okfkdZfVEx00UxqJs9r0+tf6aYzacWKm0gSRc0a/P16U/wdwmPValUfW0kR5Qgin+HrYeYIKoz8Sa0ynf1oD2M1SFtBQoZ/EJIv/ZklTH25+Hg=

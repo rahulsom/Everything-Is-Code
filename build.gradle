@@ -23,6 +23,18 @@ apply plugin: 'java'
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'com.bluepapa32.watch'
 apply plugin: 'uk.co.cacoethes.lazybones-templates'
+apply plugin: 'org.ajoberstar.github-pages'
+
+githubPages {
+  repoUri = 'https://github.com/rahulsom/Everything-Is-Code.git'
+  pages {
+    from file("$buildDir/asciidoc/html5")
+  }
+  credentials {
+    username = System.getenv('GH_TOKEN')
+    password = '\n'
+  }
+}
 
 version = '1.0.0'
 
@@ -97,9 +109,4 @@ asciidoctor {
 
 }
 
-watch {
-  asciidoc {
-    files fileTree(dir: 'src')
-    tasks 'asciidoctor'
-  }
-}
+publishGhPages.dependsOn(asciidoctor)
